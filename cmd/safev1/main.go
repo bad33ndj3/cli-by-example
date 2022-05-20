@@ -2,14 +2,20 @@ package main
 
 import (
 	"clis-by-example/pkg/secret"
-	"flag" // todo: replace flag with GNU compliant
 	"log"
+	"os"
+
+	flag "github.com/spf13/pflag" // todo: replace flag with GNU compliant
 )
 
 func main() {
 	// todo: change to flagSet
-	name := flag.String("n", "", "a name for our safe")
-	flag.Parse()
+	fs := flag.CommandLine
+	name := fs.StringP("name", "n", "", "a name for our safe")
+	err := fs.Parse(os.Args[1:])
+	if err != nil {
+		log.Fatalln(err)
+	}
 
 	if name != nil && *name == "" {
 		log.Fatalln("flag \"n\" should be set")
